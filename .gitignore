@@ -98,4 +98,8 @@ ENV/
 .ropeproject
 >>>>>>> github/master
 /crudTemplate.py
+<<<<<<< HEAD
 /authAPI.py
+=======
+/authAPI.py
+>>>>>>> commit
