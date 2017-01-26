@@ -1,10 +1,12 @@
 ## -*- coding: utf-8 -*-
 ## project/app/settings/views.py
 
-from flask import Blueprint, render_template, url_for, g, request, redirect
+from flask import Blueprint, render_template, url_for, g, request, redirect, session, json
 from app.admin.services import requiredRole, breadCrumbs, messageText, flashMessage, errorFlash, columns, loginRequired
 from app import db
 from forms import userManagementForm, groupForm, companyForm
+import requests
+from authAPI import authAPI
 
 settingsBP = Blueprint('settingsBP', __name__, template_folder='templates')
 
@@ -35,13 +37,24 @@ def settingsView(lang=None):
 @requiredRole(u'Administrator')
 @loginRequired
 def userManagementView(lang=None, id=None, function=None):
+    # universal variables
+
     g.lang = lang
     form = userManagementForm()
     kwargs = {'title':messageText('usersTitle'),
-              'width':'600',
-              'formWidth':'350',
+              'width':'',
+              'formWidth':'',
               'breadcrumbs': breadCrumbs('settingsBP.userManagementView')}
-    return render_template(lang+'/settings/userForm.html', form=form, **kwargs)
+    if function == None:
+        kwargs['tableColumns'] =columns(['userNameCol','emailCol'])
+
+        req = authAPI(endpoint='user', method='get', token=session['token'])
+
+        kwargs['tableData'] = [[r['id'],r['name'],r['email']] for r in req['users']]
+
+        return render_template(lang+'/listView.html', **kwargs)
+
+    return render_template(lang+'/listView.html', **kwargs)
 
 # Group View
 @settingsBP.route('/<string:lang>/group', methods=['GET'])

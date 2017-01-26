@@ -1,10 +1,11 @@
 ## -*- coding: utf-8 -*-
 from flask import Blueprint, session, render_template, url_for, jsonify, json, g, redirect
-from app.admin.services import ts, sendMail, flashMessage, errorFlash, messageText, loginRequired, logoutUser, requiredRole
+from app.admin.services import ts, sendMail, flashMessage, errorFlash, messageText, loginRequired, logoutUser, requiredRole, breadCrumbs
 from forms import registerForm, setPasswordForm, loginForm
 from services import validateCVR
 import requests
 import flask_sijax
+from authAPI import authAPI
 
 authBP = Blueprint('authBP', __name__, template_folder='templates')
 
@@ -13,11 +14,6 @@ authBP = Blueprint('authBP', __name__, template_folder='templates')
 def registerView(lang='dk'):
     if not 'token' in session:
         # universal variables
-        url = 'http://192.168.87.118:5000/api/register'
-
-        headers = {'platform': 'StrategyDeployment',
-                   'content-type': 'application/json'}
-
         form = registerForm()
         kwargs = {'formWidth':400,
                   'breadcrumbs': breadCrumbs('authBP.registerView')}
@@ -32,9 +28,8 @@ def registerView(lang='dk'):
                         'userName' : form.userName.data,
                         'email' : form.email.data,
                         'password' : form.password.data}
-            r = requests.post(url, headers=headers, data=json.dumps(dataDict, ensure_ascii=True))
 
-            req = json.loads(r.text)
+            req = authAPI('register', method='post', dataDict=dataDict)
 
             if r.status_code == 409:
                 flashmessage('accountExists')
@@ -68,14 +63,7 @@ def registerView(lang='dk'):
 @authBP.route('/<string:lang>/confirm/<token>')
 def confirmEmailView(token, lang='dk'):
     g.lang = lang
-    headers = {'platform': 'StrategyDeployment',
-               'content-type': 'application/json',
-               'token':token}
-    url = 'http://192.168.87.118:5000/api/confirm'
-
-    r = requests.post(url, headers=headers)
-
-    req = json.loads(r.text)
+    req = authAPI('confirm', method='post', token=token)
     if 'error' in req:
         if req['error'] == 'User already confirmed':
             flashMessage('alreadyConfirmed')
@@ -100,21 +88,10 @@ def setPasswordView(lang='dk', tok=None):
               'title':messageText('setPasswordTitle'),
               'breadcrumbs': breadCrumbs('authBP.setPasswordView')}
 
-
-    headers = {'platform': 'StrategyDeployment',
-               'content-type': 'application/json',
-               'token':str(session['token'])}
-
     form = setPasswordForm()
 
     if form.validate_on_submit():
-        url = 'http://192.168.87.118:5000/api/setPassword'
-
-        dataDict = {'password':form.password.data}
-
-        r = requests.post(url, headers=headers, data=json.dumps(dataDict, ensure_ascii=True))
-
-        req = json.loads(r.text)
+        req = authAPI('setPassword', method='post', dataDict=dataDict, token=session['token'])
         if r.status_code == 404:
             flashMessage('userDoesNotExist')
         elif 'success' in req:
@@ -131,11 +108,6 @@ def loginView(lang='dk'):
                   'contentTitle':messageText('newPassword'),
                   'breadcrumbs': breadCrumbs('authBP.loginView')}
 
-        headers = {'platform': 'StrategyDeployment',
-                   'content-type': 'application/json'}
-
-        url = 'http://192.168.87.118:5000/api/login'
-
         form = loginForm()
         if form.validate_on_submit():
             regNo = form.regNo.data
@@ -143,12 +115,10 @@ def loginView(lang='dk'):
             password = form.password.data
 
             dataDict = {'regNo':regNo,
-                           'email':email,
-                           'password':password}
+                        'email':email,
+                        'password':password}
 
-            r = requests.post(url, headers=headers, data=json.dumps(dataDict, ensure_ascii=True))
-
-            req = json.loads(r.text)
+            req = authAPI('login', method='post', dataDict=dataDict)
             if 'success' in req:
                 session['token'] = req['token']
                 session['email'] = req['email']
@@ -156,6 +126,7 @@ def loginView(lang='dk'):
                 flashMessage('loginSuccess')
                 return redirect(url_for('indexView', lang=lang))
             else:
+                print req
                 flashMessage('loginError')
 
         return render_template(lang+'/auth/loginForm.html', form=form, **kwargs)

@@ -3,6 +3,7 @@ from flask import Blueprint, session, render_template, url_for, jsonify, json, g
 from app.admin.services import flashMessage, errorFlash, messageText, loginRequired, requiredRole, breadCrumbs
 from forms import changePasswordForm
 import requests
+from authAPI import authAPI
 
 userBP = Blueprint('userBP', __name__, template_folder='templates')
 
@@ -26,23 +27,14 @@ def changePasswordView(lang='dk'):
               'contentTitle':messageText('changePassword'),
               'breadcrumbs':breadCrumbs('userBP.changePasswordView')}
 
-
-    headers = {'platform': 'StrategyDeployment',
-               'content-type': 'application/json',
-               'token':str(session['token'])}
     form = changePasswordForm()
 
     if form.validate_on_submit():
 
-        url = 'http://192.168.87.118:5000/api/changePassword'
-
         dataDict = {'password':form.password.data}
 
-        r = requests.post(url, headers=headers, data=json.dumps(dataDict, ensure_ascii=True))
-
-        req = json.loads(r.text)
-        return str(req)
-#        flashMessage('passwordChanged')
+        req = authAPI(endpoint='changePassword', method='put', dataDict=dataDict, token=session['token'])
+        flashMessage('passwordChanged')
 
     return render_template(lang+'/user/changePasswordForm.html', form=form, **kwargs)
 
