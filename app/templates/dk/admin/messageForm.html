@@ -1,0 +1,69 @@
+{% extends "dk/base.html" %}
+{% block head %}
+{{ super() }}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='select2-4.0.3/dist/css/select2.min.css') }}">
+{% endblock %}
+{% block title %}{{title|safe}}{% endblock %}
+{% block content %}
+<div style="width:{{formWidth|safe}}px;">
+<div class="x_panel">
+<div class="x_title">
+<h2>{{contentTitle|safe}}</h2>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+<form method="post">
+    {{ form.title.label }}
+    {{ form.title(class_='form-control ')}}
+    {% for error in form.title.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.messageGroup.label }}
+    {{ form.messageGroup(class_='form-control ')}}
+    {% for error in form.messageGroup.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.dk_text.label }}
+    {{ form.dk_text(class_='form-control ')}}
+    {% for error in form.dk_text.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.en_text.label }}
+    {{ form.en_text(class_='form-control ')}}
+    {% for error in form.en_text.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.parent.label }}
+    {{ form.parent(class_='form-control ')}}
+    {% for error in form.parent.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    <br><br>
+
+    <div class="input-group" style="float:right;">
+        {{ form.csrf_token }}
+        <a href="#" onclick="window.history.back();">Annuller</a> &nbsp
+        <input type="submit" class="btn btn-primary" value="OK">
+    </div>
+
+</form>
+
+</div>
+</div>
+</div>
+{% endblock %}
+{% block foot %}
+{{ super() }}
+<script src="{{url_for('static', filename='js/jquery.flexibleArea.js')}}"></script>
+<script type="text/javascript">
+$(function() {
+    $('textarea').flexible();
+});
+</script>
+<script src="{{url_for('static', filename='select2-4.0.3/dist/js/select2.full.min.js')}}"></script>
+<script type="text/javascript">
+  $('select').select2({
+      width: '100%'
+  });
+</script>
+{% endblock %}

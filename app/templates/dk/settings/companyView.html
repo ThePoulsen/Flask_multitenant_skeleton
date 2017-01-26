@@ -1,0 +1,78 @@
+{% extends "dk/base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="col companyViewContainer">
+    <div class="x_panel">
+        <div class="x_content">
+            <form action="{{ url_for('settingsBP.companyView', lang='dk') }}" method="post" >
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h3>Virksomhedsoplysninger</h3>
+                        {{ form.VATNumber.label }}
+                        {{ form.VATNumber(readonly = true, class_='form-control')}}<br>
+                        {% for error in form.VATNumber.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        {{ form.companyName.label }}
+                        {{ form.companyName(readonly=True, class_='form-control ')}}<br>
+                        {% for error in form.companyName.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        {{ form.addr.label }}
+                        {{ form.addr(class_='form-control ')}}<br>
+                        {% for error in form.addr.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        {{ form.addr2.label }}
+                        {{ form.addr2(autocomplete="false", class_='form-control ')}}<br>
+                        {% for error in form.addr2.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        {{ form.postcode.label }}
+                        {{ form.postcode(class_='form-control ')}}<br>
+                        {% for error in form.postcode.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        {{ form.city.label }}
+                        {{ form.city(class_='form-control ')}}<br>
+                        {% for error in form.city.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h3>Kontaktoplysninger</h3>
+                        {{ form.contactName.label }}
+                        {{ form.contactName(class_='form-control')}}<br>
+                        {% for error in form.contactName.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        {{ form.phone.label }}
+                        {{ form.phone(readonly=True, class_='form-control')}}<br>
+                        {% for error in form.phone.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        {{ form.email.label }}
+                        {{ form.email(readonly=True, class_='form-control')}}<br>
+                        {% for error in form.email.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                        <br>
+
+                    </div>
+                </div>
+                    <div class="input-group" style="float:right;">
+                        {{ form.csrf_token }}
+                        <input type="submit" class="btn btn-primary" value="Gem ændringer">
+                    </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+{{ super() }}
+{% endblock %}

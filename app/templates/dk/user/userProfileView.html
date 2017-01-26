@@ -1,0 +1,13 @@
+{% extends "dk/base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block title %}{{title|safe}}{% endblock %}
+{% block content %}
+
+{{content|safe}}
+
+{% endblock %}
+{% block foot %}
+{{ super() }}
+{% endblock %}

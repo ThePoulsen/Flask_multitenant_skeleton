@@ -1,0 +1,68 @@
+{% extends "dk/base.html" %}
+{% block head %}
+{{ super() }}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='select2-4.0.3/dist/css/select2.min.css') }}">
+{% endblock %}
+{% block title %}{{title|safe}}{% endblock %}
+{% block content %}
+<div style="width:{{formWidth|safe}}px;">
+<div class="x_panel">
+<div class="x_title">
+<h2>{{contentTitle|safe}}</h2>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+<form method="post" >
+    {{ form.name.label }}
+    {{ form.name(class_='form-control ')}}
+    {% for error in form.name.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.email.label }}
+    {{ form.email(class_='form-control ')}}
+    {% for error in form.email.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.phone.label }}
+    {{ form.phone(class_='form-control ')}}
+    {% for error in form.phone.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.isAdmin.label }}<br>
+    {{ form.isAdmin(class_='')}}
+    {% for error in form.isAdmin.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    <br>
+    {{ form.isSuperuser.label }}<br>
+    {{ form.isSuperuser(class_='')}}
+    {% for error in form.isSuperuser.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    <br>
+    {{ form.groups.label }}
+    {{ form.groups(class_='form-control ')}}
+    {% for error in form.groups.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    <br><br>
+    <div class="input-group" style="float:right;">
+        {{ form.csrf_token }}
+        <a href="#" onclick="window.history.back();">Annuller</a> &nbsp
+        <input type="submit" class="btn btn-primary" value="OK">
+    </div>
+</form>
+</div>
+</div>
+</div>
+
+{% endblock %}
+{% block foot %}
+{{ super() }}
+<script src="{{url_for('static', filename='select2-4.0.3/dist/js/select2.full.min.js')}}"></script>
+<script type="text/javascript">
+  $('select').select2({
+      width: '100%'
+  });
+</script>
+{% endblock %}

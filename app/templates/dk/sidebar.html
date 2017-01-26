@@ -1,0 +1,64 @@
+{% set parentNav = [
+    ('User', 'fa-home', 'fa-chevron-down', 'index', 'Hjem'),
+    ('siteAdmin', 'fa-cog', 'fa-chevron-down', 'admin', 'Administrer'),
+    ('Administrator', 'fa-cog', 'fa-chevron-down', 'settings', 'Indstillinger'),
+    ('User', 'fa-credit-card', 'fa-chevron-down', 'userProfile', 'Profil'),
+] -%}
+
+{% set childNav = [
+    ('User', '', 'indexView', 'Forside', 'index'),
+
+    ('siteAdmin', 'dk', 'adminBP.adminView', 'Administrer site', 'admin'),
+    ('siteAdmin', 'dk', 'adminBP.messageGroupView', 'Besked grupper', 'admin'),
+    ('siteAdmin', 'dk', 'adminBP.messageView', 'Beskeder', 'admin'),
+
+    ('Administrator', 'dk', 'settingsBP.companyView', 'Virksomhedsinformationer', 'settings'),
+    ('Administrator', 'dk', 'settingsBP.settingsView', 'Indstillinger', 'settings'),
+    ('Administrator', 'dk', 'settingsBP.userManagementView', 'Brugerstyring', 'settings'),
+    ('Administrator', 'dk', 'settingsBP.groupView', 'Brugergrupper', 'settings'),
+
+    ('User', 'dk', 'userBP.userProfileView', 'Vis profil', 'userProfile'),
+    ('User', 'dk', 'userBP.changePasswordView', 'Skift kodeord', 'userProfile'),
+
+
+] -%}
+
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+<div class="menu_section">
+<ul class="nav side-menu">
+
+
+{% if session['token'] %}
+    {% for auth, class, span, title, header in parentNav %}
+    {% for role in session['roles'] %}
+    {% if auth == role %}
+        <li><a ><i class="fa {{class|e}}"></i> {{header|safe}} <span class="fa {{span|e}}"></span></a>
+            <ul class="nav child_menu">
+                {% for auth2, lang, view, header2, parent in childNav %}
+                {% for role2 in session['roles'] %}
+                {% if auth2 == role2 %}
+                {% if parent == title %}
+                    <li>
+                    {% if lang != '' %}
+                        <a href="{{url_for(view|e, lang=lang|e)}}">{{header2|e}}</a>
+                    {% else %}
+                        <a href="{{url_for(view|e)}}">{{header2|e}}</a>
+                    {% endif %}
+                    </li>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </li>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    {% else %}
+<li><a id="registerView" class="" href="{{url_for('authBP.registerView', lang='dk')}}">Register</a></li>
+{% endif %}
+
+
+</ul>
+</div>
+</div>

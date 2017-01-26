@@ -1,0 +1,18 @@
+reset password function:
+user enters email address and regNo
+user gets email with token link, clicks to get to setPassword
+
+settings:
+ - manage company data
+ -- update info
+ - system settings
+ - manage users
+ -- crud
+ - manage groups
+ -- crud
+ 
+email
+ - send mail features
+ 
+crud template
+ - build 5-way crud template

@@ -1,0 +1,61 @@
+{% extends "dk/base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block title %}{{title|safe}}{% endblock %}
+{% block content %}
+<div style="width:{{width|safe}}px">
+<table class="table table-condensed ">
+    <tr>
+        {% for c in tableColumns %}<th>{{ c|safe }}</th>{% endfor %}
+        {% if not withoutDeleteEntry %}
+        <th class="tableButtons"></th>
+        {% endif %}
+        <th class="tableButtons">
+            {% if not withoutNewEntry %}
+            <a href="{{ request.path }}/new"><i class="fa fa-plus"></i></a>
+            {% endif %}
+        </th>
+    </tr>
+    {% for row in tableData %}
+        <tr>
+            {% for i in row[1:] %}
+                <td>{{ i|safe }}</td>
+            {% endfor %}
+            <td class="tableButtons">
+                {% if not detailsButton %}
+                <form name="editForm{{row[0]}}" action="{{ request.path }}/update/{{row[0]}}" class="updateForm" method="post">
+                    <input type='hidden' class="updateButton" type="submit" value="Rediger">
+                </form>
+                <a href="#" onclick="document.forms['editForm{{row[0]}}'].submit(); return false;"><i class="fa fa-edit"></i></a>
+                {% else %}
+                <form name="editForm{{row[0]}}" action="{{ request.path }}/details/{{row[0]}}" class="updateForm" method="post">
+                    <input type='hidden' class="detailsButton" type="submit" value="Detaljer">
+                </form>
+                <a href="#" onclick="document.forms['editForm{{row[0]}}'].submit(); return false;"><i class="fa fa-edit"></i></a>
+                {% endif %}
+            </td>
+            {% if not withoutDeleteEntry %}
+            <td class="tableButtons">
+                <form name="deleteForm{{row[0]}}" action="{{ request.path }}/delete/{{row[0]}}" class="deleteForm" method="post">
+                <input type='hidden' name='id' value='{{row[0]}}'>
+
+                </form>
+                <a href="#" data-toggle="modal" data-target=".deleteModal{{row[0]}}"><i class="fa fa-close"></i></a>
+            </td>
+            {% endif %}
+
+        </tr>
+    {% endfor %}
+</table>
+    </div>
+{% include 'dk/modal/deleteModal.html' %}
+<script type="text/javascript">
+    function confirm_click(){
+        return confirm("Are you sure ?");
+    }
+</script>
+{% endblock %}
+{% block foot %}
+{{ super() }}
+{% endblock %}

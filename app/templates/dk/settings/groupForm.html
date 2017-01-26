@@ -1,0 +1,51 @@
+{% extends "dk/base.html" %}
+{% block head %}
+{{ super() }}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='select2-4.0.3/dist/css/select2.min.css') }}">
+{% endblock %}
+{% block title %}{{title|safe}}{% endblock %}
+{% block content %}
+<div style="width:{{formWidth|safe}}px;">
+<div class="x_panel">
+<div class="x_title">
+<h2>{{contentTitle|safe}}</h2>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+<form method="post" >
+    {{ form.name.label }}
+    {{ form.name(class_='form-control ')}}
+    {% for error in form.name.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.desc.label }}
+    {{ form.desc(class_='form-control ')}}
+    {% for error in form.desc.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.users.label }}
+    {{ form.users(class_='form-control')}}
+    {% for error in form.users.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    <br><br>
+    <div class="input-group" style="float:right;">
+        {{ form.csrf_token }}
+        <a href="#" onclick="window.history.back();">Annuller</a> &nbsp
+        <input type="submit" class="btn btn-primary" value="OK">
+    </div>
+</form>
+</div>
+</div>
+</div>
+
+{% endblock %}
+{% block foot %}
+{{ super() }}
+<script src="{{url_for('static', filename='select2-4.0.3/dist/js/select2.full.min.js')}}"></script>
+<script type="text/javascript">
+  $('select').select2({
+      width: '100%'
+  });
+</script>
+{% endblock %}

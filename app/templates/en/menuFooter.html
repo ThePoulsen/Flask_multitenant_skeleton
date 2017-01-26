@@ -1,0 +1,12 @@
+{% if current_user.is_authenticated %}
+<div class="sidebar-footer hidden-small" style="background:#172D44;padding:0;">
+    <a data-toggle="tooltip" data-placement="top" title="Settings">
+        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="Logout" style="float:right;" href="#">
+        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+    </a>
+</div>
+{% endif %}
+
+

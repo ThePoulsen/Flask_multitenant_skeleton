@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="dk">
+<head>
+    {% block head %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/custom.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
+    {% endblock %}
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="{{url_for('indexView')}}" class="site_title">
+                  <img src="/static/images/logo.png" alt="icon"></a>
+            </div>
+            <div class="clearfix"></div>
+            <br />
+
+            <!-- sidebar menu -->
+            {% include 'dk/sidebar.html' %}
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        {% include 'dk/topNavigation.html' %}
+        <!-- /top navigation -->
+
+
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                  <div>
+                {%- for breadcrumb in breadcrumbs -%}
+                    <a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a>
+                    {{ ' - ' if not loop.last }}
+                {%- endfor -%}
+                </div>
+
+
+              </div>
+            </div>
+            <div class="clearfix"></div>
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <ul class=flashes>
+                    {% for category, message in messages %}
+                      <div id="w1" class="alert alert-{{ category[0] }} fade in">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="fa fa-asterisk"></i>&nbsp;{{ category[1] }}!</h4>{{ message }}
+                    </div>
+                    {% endfor %}
+                    </ul>
+                  {% endif %}
+                {% endwith %}
+              {% block validationMessages %}{% endblock %}
+            <div class="row">
+                <div style="float:right;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h3>{{ self.title() }}</h3>
+              {% block content %}{% endblock %}
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+      </div>
+    </div>
+    {% block foot %}
+    <script src="{{url_for('static', filename='js/jquery/jquery.js')}}"></script>
+    <script src="{{url_for('static', filename='bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/custom.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/sijax/sijax.js')}}"></script>
+    <script type="text/javascript">{{ g.sijax.get_js()|safe }}</script>
+    {% endblock %}
+  </body>
+</html>

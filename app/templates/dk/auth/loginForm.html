@@ -1,0 +1,50 @@
+{% extends "dk/base.html" %}
+{% block head %}
+{{ super() }}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='select2-4.0.3/dist/css/select2.min.css') }}">
+{% endblock %}
+{% block title %}{{title|safe}}{% endblock %}
+{% block content %}
+<div style="width:{{formWidth|safe}}px;">
+<div class="x_panel">
+<div class="x_title">
+<h2>{{contentTitle|safe}}</h2>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+<form action="{{url_for('authBP.loginView', lang='dk')}}" method="post" >
+    {{ form.regNo.label }}
+    {{ form.regNo(class_='form-control ')}}<br>
+    {% for error in form.regNo.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.email.label }}
+    {{ form.email(autocomplete="false", class_='form-control ')}}<br>
+    {% for error in form.email.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    {{ form.password.label }}
+    {{ form.password(autocomplete="new-password", class_='form-control ')}}<br>
+    {% for error in form.password.errors %}
+        <p>{{error}}</p>
+    {% endfor %}
+    <br>
+    <div class="input-group" style="float:right;">
+        {{ form.csrf_token }}
+        <a href="#" onclick="window.history.back();">Annuller</a> &nbsp
+        <input type="submit" class="btn btn-primary" tabindex="1" value="Log ind">
+    </div>
+</form>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block foot %}
+{{ super() }}
+<script src="{{url_for('static', filename='select2-4.0.3/dist/js/select2.full.min.js')}}"></script>
+<script type="text/javascript">
+  $('select').select2({
+      width: '100%'
+  });
+</script>
+{% endblock %}
