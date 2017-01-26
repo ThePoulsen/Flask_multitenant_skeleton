@@ -61,7 +61,6 @@ local_settings.py
 instance/
 .webassets-cache
 vars.py
-config.py
 app/static
 
 # Scrapy stuff:
