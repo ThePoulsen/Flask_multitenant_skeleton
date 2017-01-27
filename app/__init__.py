@@ -54,8 +54,9 @@ app.register_blueprint(userBP, url_prefix='/user')
 @app.route('/')
 @app.route('/<string:lang>/')
 def indexView(lang='dk'):
-    g.lang = lang
-    kwargs = {'title':'',
-              'contentTitle': '',
-              }
-    return render_template(lang+'/index.html', **kwargs)
+    pass
+#    g.lang = lang
+#    kwargs = {'title':'',
+#              'contentTitle': '',
+#              }
+#    return render_template(lang+'/index.html', **kwargs)

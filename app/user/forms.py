@@ -7,7 +7,7 @@ from app.admin.services import emailValidator, requiredValidator, messageText, s
 class changePasswordForm(FlaskForm):
     password = PasswordField(messageText('passwordLabel'), validators=[requiredValidator])
 
-class userManagementForm(FlaskForm):
+class userForm(FlaskForm):
     name = StringField(messageText('usernameLabel'), validators=[requiredValidator])
     email = StringField(messageText('emailLabel'), validators=[requiredValidator, emailValidator])
     phone = StringField(messageText('phoneLabel'))

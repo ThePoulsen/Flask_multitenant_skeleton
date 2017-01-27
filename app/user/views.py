@@ -1,9 +1,11 @@
 ## -*- coding: utf-8 -*-
 from flask import Blueprint, session, render_template, url_for, jsonify, json, g, redirect
 from app.admin.services import flashMessage, errorFlash, messageText, loginRequired, requiredRole, breadCrumbs, columns
-from forms import changePasswordForm, userManagementForm, groupForm
+from forms import changePasswordForm, userForm, groupForm
 import requests
 from authAPI import authAPI
+from groupCRUD import getGroups, postGroup
+from userCRUD import getUsers, getUser, postUser
 
 userBP = Blueprint('userBP', __name__, template_folder='templates')
 
@@ -55,19 +57,48 @@ def userView(lang=None, id=None, function=None):
     # universal variables
 
     g.lang = lang
-    form = userManagementForm()
+    form = userForm()
     kwargs = {'title':messageText('usersTitle'),
               'width':'',
-              'formWidth':'',
+              'formWidth':'400',
               'breadcrumbs': breadCrumbs('userBP.userView')}
+
+    # Get users
     if function == None:
+        users = getUsers()
         kwargs['tableColumns'] =columns(['userNameCol','emailCol'])
-
-        req = authAPI(endpoint='user', method='get', token=session['token'])
-
-        kwargs['tableData'] = [[r['id'],r['name'],r['email']] for r in req['users']]
+        kwargs['tableData'] = [[r['id'],r['name'],r['email']] for r in users]
 
         return render_template(lang+'/listView.html', **kwargs)
+    elif function == 'delete':
+        pass
+    else:
+        if function == 'update':
+            # Get single user
+            usr = getUser(id, includes=['includeRoles', 'includeGroups'])
+            form = userForm(name = usr['name'],
+                            email = usr['email'],
+                            phone = usr['phone'],
+                            groups = [r['id'] for r in usr['groups']])
+
+            if 'roles' in usr:
+                for r in usr['roles']:
+                    if r['title'] == 'Administrator':
+                        form.isAdmin.checked = True
+                    if r['title'] == 'Superuser':
+                        form.isSuperuser.checked = True
+#
+            # Get all groups
+            form.groups.choices = [(r['id'],r['name']) for r in getGroups()]
+
+            return render_template(lang+'/user/userForm.html', form=form, **kwargs)
+        elif function == 'new':
+            dataDict = {'name':'hej',
+                        'email':'henrik@vipilon.dk',
+                        'phone':'123',
+                        'roles':[]}
+            postUser(dataDict)
+            return 'hej'
 
     return render_template(lang+'/listView.html', **kwargs)
 
@@ -87,7 +118,7 @@ def groupView(function=None, id=None, lang=None):
 
     if function == None:
         # perform API request
-        req = authAPI(endpoint='userGroup', method='get', token=session['token'])
+        req = getGroups()
 
         # set data for listView
         kwargs['tableColumns'] =columns(['usrGroupCol'])
@@ -102,4 +133,13 @@ def groupView(function=None, id=None, lang=None):
             pass
         elif function == 'new':
             form = groupForm()
-            return render_template('')
+            form.users.choices = [(str(r['id']),r['email']) for r in getUsers()]
+
+            if form.validate_on_submit():
+                dataDict = {'name':form.name.data,
+                            'desc':form.desc.data,
+                            'users':form.users.data}
+                return jsonify(postGroup(dataDict))
+
+
+        return render_template(lang+'/user/groupForm.html', form=form)

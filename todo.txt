@@ -14,3 +14,6 @@ settings:
 email
  - send mail features
  
+user:
+ - send mail on add user
+ -- mail includes link to confirm, and then on to set password
