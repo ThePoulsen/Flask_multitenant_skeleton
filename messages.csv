@@ -160,10 +160,9 @@ authBP.loginView;view;Log ind;Login;indexView
 authBP.registerView;view;Registrer konto;Register new account;indexView
 authBP.setPasswordView;view;Angiv kodeord;Set password;indexView
 settingsBP.companyView;view;Virksomhed;Company;indexView
-settingsBP.groupView;view;Bruger grupper;User groups;indexView
 settingsBP.settingsView;view;Indstillinger;Settings;indexView
-settingsBP.userManagementView;view;Brugere;Users;indexView
-settingsBP.userView;view;Brugerstyring;User management;indexView
+userBP.groupView;view;Bruger grupper;User groups;indexView
+userBP.userView;view;Brugerstyring;User management;indexView
 userBP.userProfileView;view;Profil;Profile;indexView
 userBP.changePasswordView;view;Skift kodeord;Change password;userBP.userProfileView
 warning;warning;Advarsel;Warning;

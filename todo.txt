@@ -14,5 +14,3 @@ settings:
 email
  - send mail features
  
-crud template
- - build 5-way crud template
