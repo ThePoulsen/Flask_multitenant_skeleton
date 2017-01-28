@@ -20,6 +20,7 @@ unitPriceCol;column;Enhedspris;Unit price;
 UOMCol;column;Måleenhed;Unit of measure;
 userNameCol;column;Brugernavn;Email;
 usrGroupCol;column;Bruger gruppe;User group;
+usersCol;column;Brugere tilknyttet gruppe;Users assigned to group;
 VATCol;column;Momssats;VAT;
 alreadyConfirmed;error;Din profil er allerede bekræftet;Your profile already confirmed;
 alreadyLoggedIn;error;Du er allerede logget ind;You are already logged in;
@@ -166,3 +167,4 @@ userBP.userView;view;Brugerstyring;User management;indexView
 userBP.userProfileView;view;Profil;Profile;indexView
 userBP.changePasswordView;view;Skift kodeord;Change password;userBP.userProfileView
 warning;warning;Advarsel;Warning;
+grpHasUsers;error;Gruppe kan ikke slettes da der er brugere tilknyttet;Group cannot be deleted since there are users assigned to it;

@@ -14,10 +14,10 @@ def getUser(id, includes=None):
         return authAPI(endpoint='user/'+str(id), method='get', token=session['token'])
 
 def postUser(dataDict):
-     return authAPI(endpoint='user', method='post', dataDict=dataDict, token=session['token'])
+    return authAPI(endpoint='user', method='post', dataDict=dataDict, token=session['token'])
 
-def putUser(id, dataDict):
-    pass
+def putUser(dataDict, id):
+    return authAPI(endpoint='user/'+str(id), method='put', dataDict=dataDict, token=session['token'])
 
 def deleteUser(id):
-    pass
+    return authAPI(endpoint='user/'+str(id), method='delete', token=session['token'])

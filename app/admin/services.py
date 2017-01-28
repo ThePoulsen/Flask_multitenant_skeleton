@@ -37,12 +37,19 @@ def sendMail(subject, sender, recipients, text_body, html_body):
 
 def flashMessage(msg):
     lang = getLang()
-    mesg = message.query.filter_by(title=msg).first()
-    grp = messageGroup.query.filter_by(id=mesg.messageGroup_id).first()
-    grpmsg = message.query.filter_by(title=grp.name).first()
-    header = messageBody.query.filter_by(message_id=grpmsg.id, language_id=lang.id).first().text
-    text = messageBody.query.filter_by(message_id=mesg.id, language_id=lang.id).first().text
-    return flash(text, (grp.name, header))
+    try:
+        mesg = message.query.filter_by(title=msg).first()
+        grp = messageGroup.query.filter_by(id=mesg.messageGroup_id).first()
+        grpmsg = message.query.filter_by(title=grp.name).first()
+        header = messageBody.query.filter_by(message_id=grpmsg.id, language_id=lang.id).first().text
+        text = messageBody.query.filter_by(message_id=mesg.id, language_id=lang.id).first().text
+        return flash(text, (grp.name, header))
+    except:
+        grp = messageGroup.query.filter_by(name='error').first()
+        grpmsg = message.query.filter_by(title=grp.name).first()
+        header = messageBody.query.filter_by(message_id=grpmsg.id, language_id=lang.id).first().text
+        return flash('Fejl', (grp.name, header))
+
 
 def errorFlash(E):
     lang = getLang()
